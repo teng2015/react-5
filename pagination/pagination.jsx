@@ -26,28 +26,71 @@ var Pagination_select = React.createClass({
 });
 
 var Pagination_options = React.createClass({
-
-    getDefaultProps:function(){
+    getInitialState:function(){
         return {
-            totalPage: 0,
-            totalIndex:0
+            initialIndex:0
         }
     },
+    getDefaultProps:function(){
+        return {
+            totalPage:0,
+            firstIndex:0
+        }
+    },
+    minus:function(){
+        if(this.state.initialIndex>0){
+            this.setState({
+                initialIndex: this.state.initialIndex - 1,
+            });
+        }else{
+            alert('不能再小了');
+        }
+
+    },
+    add:function(){
+        console.log('this.props.totalPage' + this.props.totalPage);
+        console.log('this.state.initialIndex' + this.state.initialIndex);
+        if(this.state.initialIndex < this.props.totalPage-5){
+            this.setState({
+                initialIndex: this.state.initialIndex + 1,
+            });
+        }else{
+            alert('不能再大了');
+        }
+
+
+    },
     render:function(){
-        var msg = [];
-        for(var i=0;i<5;i++){
-            this.props.totalIndex++;
+        var msg = [],
+            i = this.state.initialIndex,
+            index = this.state.initialIndex,
+            l= i+5;
+        console.log('i'+i);
+        for(i;i<l;i++){
+            index++;
             msg.push(
-                <Pagination_middle totalIndex = {this.props.totalIndex}/>
+                <Pagination_middle firstIndex = {index}/>
             );
         };
+        console.log('i现在是'+i);
+        console.log('l现在是'+l);
+        console.log('index现在是'+index);
+
         return (
             <div>
 
                 <ul className="pagination">
-                    <Pagination_left totalIndex = {this.props.totalIndex}/>
+                    <li onClick={this.minus}>
+                        <a href="javascript:;" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
                     {msg}
-                    <Pagination_right totalIndex = {this.props.totalIndex}/>
+                    <li onClick={this.add}>
+                        <a href="javascript:;" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
                 </ul>
 
             </div>
@@ -55,36 +98,6 @@ var Pagination_options = React.createClass({
     }
 });
 
-var Pagination_left = React.createClass({
-
-    minus:function(){
-        console.log('left'+this.props.totalIndex);
-    },
-    render:function(){
-        return (
-            <li onClick={this.minus}>
-                <a href="javascript:;" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-        )
-    }
-});
-
-var Pagination_right = React.createClass({
-    add:function(){
-        console.log('right'+this.props.totalIndex);
-    },
-    render:function(){
-        return (
-            <li onClick={this.add}>
-                <a href="javascript:;" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-        )
-    }
-});
 
 var Pagination_middle = React.createClass({
     changePageNumber:function(){
@@ -93,7 +106,7 @@ var Pagination_middle = React.createClass({
    render:function(){
        return (
                <li>
-                   <a href="javascript:;" ref="page" onClick={this.changePageNumber}>{this.props.totalIndex}</a>
+                   <a href="javascript:;" ref="page" onClick={this.changePageNumber}>{this.props.firstIndex}</a>
                </li>
 
        )
@@ -107,7 +120,7 @@ var Pagination = React.createClass({
           pageNum: 1,
           pageSize: 50,
           totalElements: 494,
-          totalPage: 10
+          totalPage: 11
       }
     },
     render:function(){
