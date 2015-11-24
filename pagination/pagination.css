@@ -1,0 +1,10 @@
+
+.Pagination_select{
+    padding: 6px 12px;
+    display: inline-block;
+    float: left;
+    margin: 21px 20px;
+    outline: none;
+    border:1px solid #ddd;
+    border-radius:4px;
+}
