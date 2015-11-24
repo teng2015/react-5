@@ -43,7 +43,7 @@ var Pagination_options = React.createClass({
                 initialIndex: this.state.initialIndex - 1,
             });
         }else{
-            alert('不能再小了');
+            alert('不能再小了，此处稍后加上一个禁用的样式');
         }
 
     },
@@ -55,7 +55,7 @@ var Pagination_options = React.createClass({
                 initialIndex: this.state.initialIndex + 1,
             });
         }else{
-            alert('不能再大了');
+            alert('不能再大了,此处稍后加上一个禁用的样式');
         }
 
 
@@ -64,17 +64,25 @@ var Pagination_options = React.createClass({
         var msg = [],
             i = this.state.initialIndex,
             index = this.state.initialIndex,
-            l= i+5;
-        console.log('i'+i);
-        for(i;i<l;i++){
-            index++;
-            msg.push(
-                <Pagination_middle firstIndex = {index}/>
-            );
-        };
-        console.log('i现在是'+i);
-        console.log('l现在是'+l);
-        console.log('index现在是'+index);
+            l= i+5,
+            // 当总分页数不足5的时候
+            min = this.props.totalPage;
+
+        if(min<5){
+            for(i;i<min;i++){
+                index++;
+                msg.push(
+                    <Pagination_middle firstIndex = {index}/>
+                );
+            };
+        }else{
+            for(i;i<l;i++){
+                index++;
+                msg.push(
+                    <Pagination_middle firstIndex = {index}/>
+                );
+            };
+        }
 
         return (
             <div>
@@ -116,6 +124,7 @@ var Pagination_middle = React.createClass({
 
 var Pagination = React.createClass({
     getInitialState:function(){
+        // 这里为ajax返回的数据
       return {
           pageNum: 1,
           pageSize: 50,
