@@ -6,7 +6,8 @@ var Pagination_select = React.createClass({
         }
     },
     changePageSize:function(){
-        console.log(this.refs.select.getDOMNode().value);
+        var select = this.refs.select.getDOMNode().value;
+        this.props.alertSizeNumber(select,'');
     },
     render:function(){
         return (
@@ -48,8 +49,6 @@ var Pagination_options = React.createClass({
 
     },
     add:function(){
-        console.log('this.props.totalPage' + this.props.totalPage);
-        console.log('this.state.initialIndex' + this.state.initialIndex);
         if(this.state.initialIndex < this.props.totalPage-5){
             this.setState({
                 initialIndex: this.state.initialIndex + 1,
@@ -57,8 +56,6 @@ var Pagination_options = React.createClass({
         }else{
             alert('不能再大了,此处稍后加上一个禁用的样式');
         }
-
-
     },
     render:function(){
         var msg = [],
@@ -72,14 +69,14 @@ var Pagination_options = React.createClass({
             for(i;i<min;i++){
                 index++;
                 msg.push(
-                    <Pagination_middle firstIndex = {index}/>
+                    <Pagination_middle firstIndex = {index}  alertSizeNumber={this.props.alertSizeNumber}/>
                 );
             };
         }else{
             for(i;i<l;i++){
                 index++;
                 msg.push(
-                    <Pagination_middle firstIndex = {index}/>
+                    <Pagination_middle firstIndex = {index} alertSizeNumber={this.props.alertSizeNumber}/>
                 );
             };
         }
@@ -109,7 +106,9 @@ var Pagination_options = React.createClass({
 
 var Pagination_middle = React.createClass({
     changePageNumber:function(){
-        console.log('you hit me, the number is'+ this.refs.page.getDOMNode().text);
+        var number = this.refs.page.getDOMNode().text;
+        console.log('you hit me, the number is'+ number);
+        this.props.alertSizeNumber('',number);
     },
    render:function(){
        return (
@@ -125,18 +124,49 @@ var Pagination_middle = React.createClass({
 var Pagination = React.createClass({
     getInitialState:function(){
         // 这里为ajax返回的数据
-      return {
-          pageNum: 1,
-          pageSize: 50,
-          totalElements: 494,
-          totalPage: 11
-      }
+        return {
+            i:0,
+            l:0,
+            myPageSize:50,   // 默认以每页50条数据返回；
+            myPageNumber:1,   // 默认返回第一页
+
+            pageNum: 1,
+            pageSize: 50,
+            totalElements: 494,
+            totalPage: 11
+        }
     },
+    alertSizeNumber:function(pageSize,pageNumber){
+        if(pageSize==''){
+            if( this.state.i==0){
+                this.setState({
+                    myPageNumber:pageNumber,
+                    i:this.state.i+1
+                });
+                console.log('i'+this.state.i);
+            }
+            console.log('pageNumber'+pageNumber);
+            console.log(JSON.stringify(this.state));
+            alert('现在pageSize是'+this.state.myPageSize+'现在pageNumber是'+pageNumber);
+        }else if(pageNumber==''){
+                if(this.state.l==0){
+                    this.setState({
+                        myPageSize:pageSize,
+                        l:this.state.l+1
+                    });
+                    console.log('l'+this.state.l);
+                }
+            console.log(JSON.stringify(this.state));
+            alert('现在pageSize是'+pageSize+'现在pageNumber是'+this.state.myPageNumber);
+        }
+
+    },
+
     render:function(){
         return (
             <div>
-                <Pagination_select/>
-                <Pagination_options totalPage={this.state.totalPage}/>
+                <Pagination_select alertSizeNumber={this.alertSizeNumber}/>
+                <Pagination_options totalPage={this.state.totalPage}  alertSizeNumber={this.alertSizeNumber}/>
             </div>
         )
     }
