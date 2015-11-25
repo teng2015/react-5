@@ -123,43 +123,33 @@ var Pagination_middle = React.createClass({
 
 var Pagination = React.createClass({
     getInitialState:function(){
-        // 这里为ajax返回的数据
         return {
-            i:0,
-            l:0,
+            // myPageSize 和 myPageNumber 为前端提交分页请求时的分页信息；
             myPageSize:50,   // 默认以每页50条数据返回；
             myPageNumber:1,   // 默认返回第一页
 
+            // 下面这四项为 服务器从后端吐出来的初始化分页信息；
             pageNum: 1,
             pageSize: 50,
             totalElements: 494,
-            totalPage: 11
+            totalPage: 20
         }
     },
     alertSizeNumber:function(pageSize,pageNumber){
-        if(pageSize==''){
-            if( this.state.i==0){
-                this.setState({
-                    myPageNumber:pageNumber,
-                    i:this.state.i+1
-                });
-                console.log('i'+this.state.i);
-            }
-            console.log('pageNumber'+pageNumber);
-            console.log(JSON.stringify(this.state));
-            alert('现在pageSize是'+this.state.myPageSize+'现在pageNumber是'+pageNumber);
-        }else if(pageNumber==''){
-                if(this.state.l==0){
-                    this.setState({
-                        myPageSize:pageSize,
-                        l:this.state.l+1
-                    });
-                    console.log('l'+this.state.l);
-                }
-            console.log(JSON.stringify(this.state));
+
+        if(pageSize==""){
+            this.setState({
+                myPageNumber:pageNumber
+            });
+            alert('现在pageSize是'+this.state.myPageSize+'现在pageNumber是'+pageNumber)
+        };
+
+        if(pageNumber==""){
+            this.setState({
+                myPageSize:pageSize
+            });
             alert('现在pageSize是'+pageSize+'现在pageNumber是'+this.state.myPageNumber);
         }
-
     },
 
     render:function(){
